@@ -2,27 +2,27 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Para ti 💜</title>
+<title>Para ti 💜💙</title>
 
 <style>
 body{
   margin:0;
   background:#0f0f0f;
-  min-height:100vh;
+  height:100vh;
+  overflow:hidden;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   font-family: Arial, sans-serif;
-  overflow:hidden;
 }
 
 /* Carrusel */
 .carousel{
   width:260px;
-  height:260px;
-  border-radius:20px;
+  height:160px;
   overflow:hidden;
+  border-radius:20px;
   border:4px solid #c77dff;
   margin-bottom:20px;
 }
@@ -41,33 +41,37 @@ body{
 /* Corazón */
 svg{
   width:200px;
-  animation:latido 1.2s infinite;
+  height:180px;
+  animation: beat 1.2s infinite;
 }
 
-@keyframes latido{
+@keyframes beat{
   0%{transform:scale(1)}
-  50%{transform:scale(1.1)}
+  25%{transform:scale(1.08)}
+  50%{transform:scale(1)}
+  75%{transform:scale(1.08)}
   100%{transform:scale(1)}
 }
 
 /* Texto */
 .text{
+  margin-top:15px;
   color:#4dabf7;
   font-size:22px;
   font-weight:bold;
   text-align:center;
-  margin-top:15px;
-  min-height:60px;
+  max-width:90%;
+  min-height:80px;
 }
 
 /* Botón */
-button{
+.play-btn{
   margin-top:15px;
   padding:12px 26px;
   background:#c77dff;
   color:#0f0f0f;
   border:none;
-  border-radius:30px;
+  border-radius:25px;
   font-size:16px;
   cursor:pointer;
 }
@@ -75,12 +79,6 @@ button{
 </head>
 
 <body>
-
-<!-- AUDIO (FORMA QUE SÍ FUNCIONA) -->
-<audio id="music" preload="auto">
-  <source src="./musica.mp3" type="audio/mpeg">
-  Tu navegador no soporta audio
-</audio>
 
 <!-- CARRUSEL -->
 <div class="carousel">
@@ -115,52 +113,60 @@ button{
        C32,3.8,28.2,0,23.6,0z"/>
 </svg>
 
+<!-- TEXTO -->
 <div class="text" id="texto"></div>
 
-<button onclick="playMusic()">▶ Toca para escuchar 💜</button>
+<!-- BOTÓN -->
+<button class="play-btn" id="playBtn">Toca para escuchar 💜</button>
 
 <script>
-// TEXTO
+// ===== TEXTO =====
 const mensaje =
 "TE AMO PRINCESA HERMOSA 💙\n"+
 "Nuestro primer fin de año juntos.\n"+
-"Gracias por estos 7 meses increíbles.\n"+
-"Eres el amor de mi vida.";
+"Eres el amor de mi vida.\n"+
+"Gracias por cada momento.\n"+
+"Vamos por muchos más ✨";
 
 let i=0;
-const texto=document.getElementById("texto");
+const textoDiv=document.getElementById("texto");
 
 function escribir(){
   if(i<mensaje.length){
-    texto.textContent+=mensaje.charAt(i);
+    textoDiv.textContent+=mensaje.charAt(i);
     i++;
-    setTimeout(escribir,80);
+    setTimeout(escribir,70);
   }
 }
 escribir();
 
-// AUDIO — ESTA ES LA CLAVE
-function playMusic(){
-  const audio=document.getElementById("music");
-  audio.muted=false;
-  audio.volume=1;
-  audio.play().then(()=>{
-    console.log("🎵 Música sonando");
-  }).catch(e=>{
-    alert("Toca otra vez la pantalla 💜");
-  });
-}
-
-// CARRUSEL
-const fotos=document.querySelectorAll(".carousel img");
+// ===== CARRUSEL =====
+const imgs=document.querySelectorAll(".carousel img");
 let idx=0;
 
 setInterval(()=>{
-  fotos[idx].classList.remove("active");
-  idx=(idx+1)%fotos.length;
-  fotos[idx].classList.add("active");
-},2500);
+  imgs[idx].classList.remove("active");
+  idx=(idx+1)%imgs.length;
+  imgs[idx].classList.add("active");
+},3000);
+
+// ===== AUDIO (FORMA CORRECTA) =====
+let audio = null;
+
+document.getElementById("playBtn").addEventListener("click", ()=>{
+  if(!audio){
+    audio = new Audio("musica.mp3");
+    audio.loop = true;
+  }
+  audio.play().then(()=>{
+    document.getElementById("playBtn").style.display="none";
+  }).catch(err=>{
+    alert("Toca otra vez la pantalla para activar el audio 💜");
+    console.log(err);
+  });
+});
 </script>
 
 </body>
 </html>
+
